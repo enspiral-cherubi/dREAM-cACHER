@@ -3,6 +3,7 @@ class CreateDreams < ActiveRecord::Migration
     create_table :dreams do |t|
       t.belongs_to :user
       t.text :contents
+      t.float :sentiment
 
       t.timestamps null: false
     end

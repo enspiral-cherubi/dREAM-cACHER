@@ -5,4 +5,6 @@ FactoryGirl.define do
     password 'asdfqwer'
   end
 
+
+
 end
