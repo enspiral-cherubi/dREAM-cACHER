@@ -7,10 +7,11 @@ users = []
 tags = []
 dreams = []
 
-tags = ["fuck","teeth","money","sex","food","music","love","hate","gold","bars","tsunami","earthquake","party"]
+tagsWords = ["fuck","teeth","money","sex","food","music","love","hate","gold","bars","tsunami","earthquake","party"]
 
-tags.length.times do |i|
-  tag = Tag.create(word: tags[i])
+tagsWords.length.times do |i|
+  tag = Tag.create(word: tagsWords[i])
+  tags.push(tag)
 end
 
 
@@ -37,8 +38,8 @@ end
 3.times do
   dreams.length.times do | i |
     Theme.create(
-      dream_id: dreams[i],
-      tag_id: tags.sample
+      dream_id: dreams[i].id,
+      tag_id: tags.sample.id
     )
   end
 end

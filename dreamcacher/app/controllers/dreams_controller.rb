@@ -17,6 +17,9 @@ class DreamsController < ApplicationController
     render json: @dreams
   end
 
+  def new
+  end
+
   def create
     @user = User.find_by_id(params[:user_id])
     @dream = @user.dream.new(

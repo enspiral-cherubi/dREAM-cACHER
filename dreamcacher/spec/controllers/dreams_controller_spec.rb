@@ -81,4 +81,11 @@ RSpec.describe DreamsController, type: :controller do
     end
   end
 
+  describe "#new" do
+    it { should respond_with(200) }
+
+    it { should render_template(:new) }
+
+  end
+
 end
