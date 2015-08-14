@@ -1,3 +1,4 @@
 class Tag < ActiveRecord::Base
-  belongs_to :dream
+  has_many :themes
+  has_many :dreams, through: :themes
 end
