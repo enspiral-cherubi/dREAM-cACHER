@@ -17,7 +17,7 @@ RSpec.describe DreamsController, type: :controller do
 
     it { should respond_with(200) }
 
-    it "will contain all dreams in the body of the last response, as json" do
+    it "will return all dreams in the db, in the body of the last response, as json" do
       expect(response.body).to eq(dreams.to_json)
     end
 
