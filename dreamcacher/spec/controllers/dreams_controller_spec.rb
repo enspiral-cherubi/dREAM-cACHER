@@ -26,6 +26,59 @@ RSpec.describe DreamsController, type: :controller do
     end
   end
 
+  describe "#show" do
+    before do
+        @dream = create(:dream)
+        get :show, id: @dream.id
+    end
 
+    it { should respond_with(200) }
+
+    it "should return specified dream in last response body, as json" do
+      expect(response.body).to eq(@dream.to_json)
+    end
+
+    it "should assign specified dream to @dream" do
+      expect(assigns(:dream)).to eq(@dream)
+    end
+  end
+
+  describe "#mine" do
+    before do
+      10.times { create(:dream, user_id: @user.id ) }
+      @dreams = User.dreams.all
+      get :mine, user_id: @user.id
+    end
+
+    it { should respond_with(200) }
+
+    it "should return a user's dreams in last response body, as json" do
+      expect(response.body).to eq(@dreams.to_json)
+    end
+
+    it "should assign the users dreams to @dreams" do
+      expect(assigns(:dreams)).to eq(@dreams)
+    end
+  end
+
+
+
+  describe "#create" do
+    before do
+      @dream_params = attributes_for(:dream, user_id: @user.id)
+      get :create, tip: @tip_params
+    end
+
+    it { should respond_with(302) }
+
+    it "creates a new dream with specified params" do
+      expect(Dream.count).to eq(1)
+    end
+
+    it "creates a dream with the new dreams params, associated to the user" do
+      dream = Dream.last
+      expect(@user.dreams).to include(dream)
+    end
+  end
 
 end

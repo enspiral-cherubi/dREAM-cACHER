@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 
   resources :dreams, except: [:edit, :update, :destroy]
 
+  get 'users/:user_id/dreams', to: 'dreams#mine'
+
 
 
   # The priority is based upon order of creation: first created -> highest priority.
