@@ -12,5 +12,12 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
-//= require_tree .
+//= require jquery-readyselector
+//= require three.min
+//= require orbitControls
+//= require Projector
+//= require pages/dreamscape/router
+//= require pages/dreamscape/model
+//= require pages/dreamscape/controller
+//= require pages/dreamscape/view
+//= require pages/dreamscape/scene
