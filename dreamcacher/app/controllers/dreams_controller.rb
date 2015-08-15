@@ -18,6 +18,7 @@ class DreamsController < ApplicationController
   end
 
   def new
+
   end
 
   def create
@@ -26,7 +27,7 @@ class DreamsController < ApplicationController
       contents: params[:contents]
     )
     if @dream.save
-      # render the dreamscape
+      redirect_to dreamscape_path
     else
       # yoooooo something went wrong...
     end

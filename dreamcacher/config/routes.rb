@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
 
   devise_for :users
-  root to: "dreams#index"
+
+  root to: "dreams#new"
 
   resources :dreams, except: [:edit, :update, :destroy]
 
@@ -9,6 +10,7 @@ Rails.application.routes.draw do
 
   get 'tags/:tag_id', to: 'tags#dreams'
 
+  get 'dreamscape', to: 'pags#dreamscape'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
