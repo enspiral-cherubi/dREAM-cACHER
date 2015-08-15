@@ -11,18 +11,18 @@ RSpec.describe DreamsController, type: :controller do
   describe "#index" do
     before do
       10.times { create(:dream) }
-      dreams = Dream.all
+      @dreams = Dream.all
       get :index
     end
 
     it { should respond_with(200) }
 
     it "will return all dreams in the db, in the body of the last response, as json" do
-      expect(response.body).to eq(dreams.to_json)
+      expect(response.body).to eq(@dreams.to_json)
     end
 
     it "should assign @dreams to all dreams in the DB" do
-      expect(assigns(:dreams)).to eq(Dreams.all)
+      expect(assigns(:dreams)).to eq(@dreams)
     end
   end
 
@@ -46,7 +46,7 @@ RSpec.describe DreamsController, type: :controller do
   describe "#mine" do
     before do
       10.times { create(:dream, user_id: @user.id ) }
-      @dreams = User.dreams.all
+      @dreams = @user.dreams.all
       get :mine, user_id: @user.id
     end
 
@@ -66,13 +66,13 @@ RSpec.describe DreamsController, type: :controller do
   describe "#create" do
     before do
       @dream_params = attributes_for(:dream, user_id: @user.id)
-      get :create, tip: @tip_params
+      get :create, dream: @dream_params, user_id: @user.id
     end
 
     it { should respond_with(302) }
 
     it "creates a new dream with specified params" do
-      expect(Dream.count).to eq(1)
+      expect(Dream.all.count).to eq(1)
     end
 
     it "creates a dream with the new dreams params, associated to the user" do

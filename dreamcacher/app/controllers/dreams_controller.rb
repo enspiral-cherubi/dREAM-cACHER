@@ -21,11 +21,11 @@ class DreamsController < ApplicationController
   end
 
   def create
-    @user = User.find_by_id(params[:user_id])
-    @dream = @user.dream.new(
+    @user = User.find(params[:user_id])
+    @dream = @user.dreams.new(
       contents: params[:contents]
     )
-    if @tip.save
+    if @dream.save
       # render the dreamscape
     else
       # yoooooo something went wrong...

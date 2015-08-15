@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   get 'users/:user_id/dreams', to: 'dreams#mine'
 
+  get 'tags/:tag_id', to: 'tags#dreams'
 
 
   # The priority is based upon order of creation: first created -> highest priority.
