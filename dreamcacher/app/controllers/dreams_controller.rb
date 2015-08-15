@@ -18,14 +18,17 @@ class DreamsController < ApplicationController
   end
 
   def new
-
+    @dream = Dream.new
   end
 
   def create
-    @user = User.find(params[:user_id])
-    @dream = @user.dreams.new(
-      contents: params[:contents]
-    )
+    puts "**" * 30
+    puts params[:dream]
+    @user = User.find(current_user.id)
+    @dream = Dream.new({
+      contents: params[:dream]["contents"],
+      user_id: current_user.id
+    })
     if @dream.save
       redirect_to dreamscape_path
     else
