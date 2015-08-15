@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   root to: "dreams#new"
 
+  get 'dreamscape', to: 'pages#dreamscape'
+
   resources :dreams, except: [:edit, :update, :destroy]
 
   get 'users/:user_id/dreams', to: 'dreams#mine'
