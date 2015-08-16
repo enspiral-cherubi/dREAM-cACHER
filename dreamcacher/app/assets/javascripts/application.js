@@ -16,8 +16,8 @@
 //= require three.min
 //= require orbitControls
 //= require Projector
-//= require pages/dreamscape/router
-//= require pages/dreamscape/model
-//= require pages/dreamscape/controller
-//= require pages/dreamscape/view
-//= require pages/dreamscape/scene
+//= require pages/scene
+//= require pages/view
+//= require pages/model
+//= require pages/controller
+//= require pages/router

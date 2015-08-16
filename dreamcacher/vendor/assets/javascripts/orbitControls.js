@@ -1,4 +1,4 @@
-var THREE = require('./three.min.js');
+// var THREE = require('./three.min.js');
 /**
  * @author qiao / https://github.com/qiao
  * @author mrdoob / http://mrdoob.com
