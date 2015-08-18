@@ -15,6 +15,9 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# to let the asset pipline know about bower
+config.assets.paths << Rails.root.join('vendor', 'assets', 'components')
+
 module Dreamcacher
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
