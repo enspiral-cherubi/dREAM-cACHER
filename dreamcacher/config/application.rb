@@ -15,8 +15,7 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-# to let the asset pipline know about bower
-config.assets.paths << Rails.root.join('vendor', 'assets', 'components')
+
 
 module Dreamcacher
   class Application < Rails::Application
@@ -34,5 +33,9 @@ module Dreamcacher
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    # to let the asset pipline know about bower
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'components')
+
   end
 end
