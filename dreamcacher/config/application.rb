@@ -37,5 +37,14 @@ module Dreamcacher
     # to let the asset pipline know about bower
     config.assets.paths << Rails.root.join('vendor', 'assets', 'components')
 
+
+    # allow cross origin resourse sharing
+    config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*', :headers => :any, :methods => [:get, :post, :options]
+      end
+    end
+
   end
 end

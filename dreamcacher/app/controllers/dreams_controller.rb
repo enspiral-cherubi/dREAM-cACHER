@@ -1,5 +1,5 @@
 class DreamsController < ApplicationController
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
 
   def index
     @dreams = Dream.all
@@ -17,13 +17,10 @@ class DreamsController < ApplicationController
     render json: @dreams
   end
 
-  def new
-    @dream = Dream.new
-  end
+  # def new
+  # end
 
   def create
-    puts "**" * 30
-    puts params[:dream]
     @user = User.find(current_user.id)
     @dream = Dream.new({
       contents: params[:dream]["contents"],
