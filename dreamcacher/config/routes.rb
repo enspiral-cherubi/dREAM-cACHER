@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
+  mount_devise_token_auth_for 'User', at: 'auth'
 
-  devise_for :users
+  # devise_for :users
 
   root to: "dreams#new"
 
@@ -8,7 +9,7 @@ Rails.application.routes.draw do
 
   resources :dreams, except: [:edit, :update, :destroy]
 
-  get 'users/:user_id/dreams', to: 'dreams#mine'
+  get 'user/dreams', to: 'dreams#mine'
 
   get 'tags/:tag_id', to: 'tags#dreams'
 

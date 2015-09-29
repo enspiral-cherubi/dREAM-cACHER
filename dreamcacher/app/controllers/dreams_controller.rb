@@ -1,5 +1,5 @@
 class DreamsController < ApplicationController
-  # before_action :authenticate_user!
+before_action :authenticate_user!, :only => [:mine]
 
   def index
     @dreams = Dream.all
@@ -12,8 +12,7 @@ class DreamsController < ApplicationController
   end
 
   def mine
-    user = User.find_by_id(params[:user_id])
-    @dreams = user.dreams.all
+    @dreams = current_user.dreams.all
     render json: @dreams
   end
 
@@ -21,10 +20,14 @@ class DreamsController < ApplicationController
   # end
 
   def create
+    Sentimental.load_defaults
+    Sentimental.threshold = 0.1
+    analyzer = Sentimental.new
     @user = User.find(current_user.id)
     @dream = Dream.new({
       contents: params[:dream]["contents"],
-      user_id: current_user.id
+      user_id: current_user.id,
+      sentiment: ((analyzer.get_score dreamString) / 10)
     })
     if @dream.save
       redirect_to dreamscape_path
