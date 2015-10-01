@@ -20,19 +20,20 @@ before_action :authenticate_user!, :only => [:mine]
   # end
 
   def create
+    dream_string = params['dream']
     Sentimental.load_defaults
     Sentimental.threshold = 0.1
     analyzer = Sentimental.new
-    @user = User.find(current_user.id)
+    @user = current_user || User.find_by_name('anonymous')
     @dream = Dream.new({
-      contents: params[:dream]["contents"],
-      user_id: current_user.id,
-      sentiment: ((analyzer.get_score dreamString) / 10)
+      contents: dream_string,
+      user_id: @user.id,
+      sentiment: ((analyzer.get_score dream_string) / 10)
     })
     if @dream.save
-      redirect_to dreamscape_path
+      render json: @drean
     else
-      # yoooooo something went wrong...
+      render json: ({error: 'shiiiiit fuck up!'})
     end
   end
 

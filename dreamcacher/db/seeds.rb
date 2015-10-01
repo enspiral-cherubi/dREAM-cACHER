@@ -26,6 +26,13 @@ end
 
 
 user = User.create(
+    email: "anonymous@anonymous.com",
+    name: "anonymous",
+    password: "asdfqwer",
+    password_confirmation: 'asdfqwer'
+  )
+
+user = User.create(
     email: "example@email.com",
     name: "test",
     password: "asdfqwer",
