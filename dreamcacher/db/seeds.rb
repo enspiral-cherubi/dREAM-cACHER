@@ -26,18 +26,18 @@ end
 
 
 user = User.create(
-    email: "anonymous@anonymous.com",
-    name: "anonymous",
-    password: "asdfqwer",
-    password_confirmation: 'asdfqwer'
-  )
+  email: "anonymous@anonymous.com",
+  name: "anonymous",
+  password: "asdfqwer",
+  password_confirmation: 'asdfqwer'
+)
 
 user = User.create(
-    email: "example@email.com",
-    name: "test",
-    password: "asdfqwer",
-    password_confirmation: 'asdfqwer'
-  )
+  email: "example@email.com",
+  name: "test",
+  password: "asdfqwer",
+  password_confirmation: 'asdfqwer'
+)
 users.push user
 
 
@@ -51,7 +51,7 @@ users.push user
 end
 
 
-25.times do
+1.times do
   dreamsContent.each do | dreamString |
     dream = Dream.create(
       contents: dreamString,
@@ -63,14 +63,47 @@ end
 end
 
 
-# create themes
 
-# 3.times do
-#   dreams.length.times do | i |
-#     Theme.create(
-#       dream_id: dreams[i].id,
-#       tag_id: tags.sample.id
-#     )
-#   end
-# end
+def retreave_tags(hash)
+  hash.map do | k, v |
+    k.downcase
+  end
+end
 
+def create_themes(tag_words, dream)
+  tag_words.each do | word |
+    tag = Tag.find_or_create_by(word: word)
+    Theme.create(tag: tag, dream: dream)
+  end
+end
+
+def create_sentiment_analyzer
+  Sentimental.load_defaults
+  Sentimental.threshold = 0.1
+  Sentimental.new
+end
+
+def create_tag_words(text)
+  tgr = EngTagger.new
+  tag_words = []
+  # Add part-of-speech tags to text
+  tagged = tgr.add_tags(text)
+
+  # Get all nouns from a tagged output
+  nouns = tgr.get_nouns(tagged)
+  # Get all proper nouns
+  # proper = tgr.get_proper_nouns(tagged)
+  # Get all the adjectives
+  adj = tgr.get_adjectives(tagged)
+  tag_words.push retreave_tags(nouns)
+  tag_words.push retreave_tags(adj)
+  tag_words.flatten
+end
+
+analyzer = create_sentiment_analyzer
+
+dreams.each do | dream |
+  dream_string = dream.contents
+  tag_words = create_tag_words(dream_string)
+  create_themes(tag_words, dream)
+end

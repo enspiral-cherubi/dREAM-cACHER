@@ -1,5 +1,7 @@
 class DreamsController < ApplicationController
 before_action :authenticate_user!, :only => [:mine]
+# require 'rubygems'
+# require 'engtagger'
 
   def index
     @dreams = Dream.all
@@ -20,21 +22,70 @@ before_action :authenticate_user!, :only => [:mine]
   # end
 
   def create
-    dream_string = params['dream']
-    Sentimental.load_defaults
-    Sentimental.threshold = 0.1
-    analyzer = Sentimental.new
     @user = current_user || User.find_by_name('anonymous')
+    dream_string = params['dream']
+    analyzer = create_sentiment_analyzer
+    tag_words = create_tag_words(dream_string)
+
     @dream = Dream.new({
       contents: dream_string,
       user_id: @user.id,
       sentiment: ((analyzer.get_score dream_string) / 10)
     })
     if @dream.save
-      render json: @drean
+      create_themes(tag_words, @dream)
+      render json: @dream
     else
       render json: ({error: 'shiiiiit fuck up!'})
     end
   end
+
+  def from_tag
+    tag = Tag.find_by_word(params[:tag])
+    themes = Theme.where(tag: tag)
+    @dreams = themes.map { | theme | theme.dream }
+    render json: @dreams
+  end
+
+
+
+
+
+  def retreave_tags(hash)
+    hash.map do | k, v |
+      k.downcase
+    end
+  end
+
+  def create_themes(tag_words, dream)
+    tag_words.each do | word |
+      tag = Tag.find_or_create_by(word: word)
+      Theme.create(tag: tag, dream: dream)
+    end
+  end
+
+  def create_sentiment_analyzer
+    Sentimental.load_defaults
+    Sentimental.threshold = 0.1
+    Sentimental.new
+  end
+
+  def create_tag_words(text)
+    tgr = EngTagger.new
+    tag_words = []
+    # Add part-of-speech tags to text
+    tagged = tgr.add_tags(text)
+
+    # Get all nouns from a tagged output
+    nouns = tgr.get_nouns(tagged)
+    # Get all proper nouns
+    # proper = tgr.get_proper_nouns(tagged)
+    # Get all the adjectives
+    adj = tgr.get_adjectives(tagged)
+    tag_words.push retreave_tags(nouns)
+    tag_words.push retreave_tags(adj)
+    tag_words.flatten
+  end
+
 
 end

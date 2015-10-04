@@ -1,19 +1,17 @@
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'auth'
 
-  # devise_for :users
-
   root to: "dreams#new"
-
-  get 'dreamscape', to: 'pages#dreamscape'
 
   resources :dreams, except: [:edit, :update, :destroy]
 
   get 'user/dreams', to: 'dreams#mine'
 
-  get 'tags/:tag_id', to: 'tags#dreams'
+  get 'dream/tags', to: 'tags#from_dream'
 
-  get 'dreamscape', to: 'pags#dreamscape'
+  get 'tag/dreams', to: 'dreams#from_tag'
+  # get 'tags/:tag_id', to: 'tags#dreams'
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
