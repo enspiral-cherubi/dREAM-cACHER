@@ -1,25 +1,21 @@
 class DreamsController < ApplicationController
 before_action :authenticate_user!, :only => [:mine]
-# require 'rubygems'
-# require 'engtagger'
 
   def index
-    @dreams = Dream.all
+    @dreams = Dream.order(created_at: :desc)
     render json: @dreams
   end
 
-  def show
-    @dream = Dream.find_by_id(params[:id])
-    render json: @dream
-  end
+  # def show
+  #   @dream = Dream.find_by_id(params[:id])
+  #   render json: @dream
+  # end
 
   def mine
     @dreams = current_user.dreams.all
+    @dreams.sort_by! { |dream| dream[:id] }.reverse!
     render json: @dreams
   end
-
-  # def new
-  # end
 
   def create
     @user = current_user || User.find_by_name('anonymous')
@@ -41,15 +37,17 @@ before_action :authenticate_user!, :only => [:mine]
   end
 
   def from_tag
-    tag = Tag.find_by_word(params[:tag])
+    tag_word = params[:tag].downcase
+    tag = Tag.find_by_word(tag_word)
     themes = Theme.where(tag: tag)
     @dreams = themes.map { | theme | theme.dream }
+    @dreams.sort_by! { |dream| dream[:id] }.reverse!
     render json: @dreams
   end
 
 
 
-
+  private
 
   def retreave_tags(hash)
     hash.map do | k, v |

@@ -51,7 +51,7 @@ users.push user
 end
 
 
-1.times do
+25.times do
   dreamsContent.each do | dreamString |
     dream = Dream.create(
       contents: dreamString,
