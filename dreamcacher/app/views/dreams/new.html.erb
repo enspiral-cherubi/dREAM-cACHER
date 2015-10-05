@@ -1,0 +1,6 @@
+<h1>This is the dreams#new route!!</h1>
+
+<%= form_for @dream, url: {action: "create"}, html: {class: "nifty_form"} do |f| %>
+  <%= f.text_area :contents, size: "60x12" %>
+  <%= f.submit "Create" %>
+<% end %>

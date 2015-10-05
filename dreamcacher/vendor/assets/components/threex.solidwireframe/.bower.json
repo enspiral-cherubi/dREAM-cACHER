@@ -1,0 +1,14 @@
+{
+  "name": "threex.solidwireframe",
+  "homepage": "https://github.com/jeromeetienne/threex.solidwireframe",
+  "_release": "445e2466f3",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "445e2466f35df1d764922bdfa80d01d953e62025"
+  },
+  "_source": "git://github.com/jeromeetienne/threex.solidwireframe.git",
+  "_target": "*",
+  "_originalSource": "threex.solidwireframe",
+  "_direct": true
+}
