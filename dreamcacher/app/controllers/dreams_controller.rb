@@ -12,8 +12,8 @@ before_action :authenticate_user!, :only => [:mine]
   # end
 
   def mine
-    @dreams = current_user.dreams.all
-    @dreams.sort_by! { |dream| dream[:id] }.reverse!
+    @dreams = current_user.dreams.order(created_at: :desc)
+    # @dreams.sort_by! { |dream| dream[:id] }.reverse!
     render json: @dreams
   end
 
@@ -37,7 +37,7 @@ before_action :authenticate_user!, :only => [:mine]
   end
 
   def from_tag
-    tag_word = params[:tag].downcase
+    tag_word = params[:tag].downcase.strip
     tag = Tag.find_by_word(tag_word)
     themes = Theme.where(tag: tag)
     @dreams = themes.map { | theme | theme.dream }

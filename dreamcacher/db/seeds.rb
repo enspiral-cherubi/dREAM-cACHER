@@ -1,8 +1,12 @@
 require 'sentimental'
 
-Sentimental.load_defaults
-Sentimental.threshold = 0.1
-analyzer = Sentimental.new
+def create_sentiment_analyzer
+  Sentimental.load_defaults
+  Sentimental.threshold = 0.1
+  Sentimental.new
+end
+
+analyzer = create_sentiment_analyzer
 
 User.destroy_all
 Dream.destroy_all
@@ -51,7 +55,8 @@ users.push user
 end
 
 
-25.times do
+# 25.times do
+1.times do
   dreamsContent.each do | dreamString |
     dream = Dream.create(
       contents: dreamString,
@@ -77,10 +82,9 @@ def create_themes(tag_words, dream)
   end
 end
 
-def create_sentiment_analyzer
-  Sentimental.load_defaults
-  Sentimental.threshold = 0.1
-  Sentimental.new
+
+def remove_punctuation(tag_words)
+  tag_words.map { | word | word.gsub(/\p{^Alnum}/, '') }
 end
 
 def create_tag_words(text)
@@ -97,13 +101,19 @@ def create_tag_words(text)
   adj = tgr.get_adjectives(tagged)
   tag_words.push retreave_tags(nouns)
   tag_words.push retreave_tags(adj)
-  tag_words.flatten
+  tag_words.flatten!
+  tag_words = remove_punctuation(tag_words)
+
+  # p tag_words
 end
 
-analyzer = create_sentiment_analyzer
+
 
 dreams.each do | dream |
   dream_string = dream.contents
   tag_words = create_tag_words(dream_string)
   create_themes(tag_words, dream)
 end
+
+
+# Tag.where("word like ?", "%.%")
