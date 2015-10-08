@@ -6,14 +6,8 @@ before_action :authenticate_user!, :only => [:mine]
     render json: @dreams
   end
 
-  # def show
-  #   @dream = Dream.find_by_id(params[:id])
-  #   render json: @dream
-  # end
-
   def mine
     @dreams = current_user.dreams.order(created_at: :desc)
-    # @dreams.sort_by! { |dream| dream[:id] }.reverse!
     render json: @dreams
   end
 
@@ -32,7 +26,7 @@ before_action :authenticate_user!, :only => [:mine]
       create_themes(tag_words, @dream)
       render json: @dream
     else
-      render json: ({error: 'shiiiiit fuck up!'})
+      render json: ({error: '............!'})
     end
   end
 
@@ -68,21 +62,30 @@ before_action :authenticate_user!, :only => [:mine]
     Sentimental.new
   end
 
+  def remove_punctuation(tag_words)
+    tag_words.map { | word | word.gsub(/\p{^Alnum}/, '') }
+  end
+
   def create_tag_words(text)
     tgr = EngTagger.new
     tag_words = []
+
     # Add part-of-speech tags to text
     tagged = tgr.add_tags(text)
 
     # Get all nouns from a tagged output
     nouns = tgr.get_nouns(tagged)
+    tag_words.push retreave_tags(nouns)
+
     # Get all proper nouns
     # proper = tgr.get_proper_nouns(tagged)
+
     # Get all the adjectives
     adj = tgr.get_adjectives(tagged)
-    tag_words.push retreave_tags(nouns)
     tag_words.push retreave_tags(adj)
-    tag_words.flatten
+    tag_words.flatten!
+    remove_punctuation(tag_words)
+
   end
 
 

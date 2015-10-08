@@ -11,7 +11,7 @@ RSpec.describe DreamsController, type: :controller do
   describe "#index" do
     before do
       10.times { create(:dream) }
-      @dreams = Dream.all
+      @dreams = Dream.order(created_at: :desc)
       get :index
     end
 
@@ -26,27 +26,10 @@ RSpec.describe DreamsController, type: :controller do
     end
   end
 
-  describe "#show" do
-    before do
-        @dream = create(:dream)
-        get :show, id: @dream.id
-    end
-
-    it { should respond_with(200) }
-
-    it "should return specified dream in last response body, as json" do
-      expect(response.body).to eq(@dream.to_json)
-    end
-
-    it "should assign specified dream to @dream" do
-      expect(assigns(:dream)).to eq(@dream)
-    end
-  end
-
   describe "#mine" do
     before do
       10.times { create(:dream, user_id: @user.id ) }
-      @dreams = @user.dreams.all
+      @dreams = @user.dreams.order(created_at: :desc)
       get :mine, user_id: @user.id
     end
 
@@ -65,8 +48,8 @@ RSpec.describe DreamsController, type: :controller do
 
   describe "#create" do
     before do
-      @dream_params = attributes_for(:dream, user_id: @user.id)
-      get :create, dream: @dream_params, user_id: @user.id
+      # @dream_params = attributes_for(:dream, user_id: @user.id)
+      get :create, dream: 'asdf'
     end
 
     it { should respond_with(302) }
@@ -81,11 +64,48 @@ RSpec.describe DreamsController, type: :controller do
     end
   end
 
-  describe "#new" do
-    xit { should respond_with(200) }
+  describe '#from_tag' do
+    before do
+      10.times { create(:dream, user_id: @user.id ) }
+      @tag = create(:tag)
+      @dreams = Dream.order(created_at: :desc)
+      @dreams.each do | dream |
+        create(:theme, dream_id: dream.id, tag_id: @tag.id)
+      end
 
-    xit { should render_template(:new) }
+      @dreams
 
+      get :index, tag_word: @tag.word
+    end
+
+    it { should respond_with(200) }
+
+    it "will return all dreams with a specified tag, in the body of the last response, as json" do
+      expect(response.body).to eq(@dreams.to_json)
+    end
+
+    it "should assign @dreams to all dreams with the specified tag" do
+      expect(assigns(:dreams)).to eq(@dreams)
+    end
   end
+
+
+  # describe "#show" do
+  #   before do
+  #       @dream = create(:dream)
+  #       get :show, id: @dream.id
+  #   end
+
+  #   it { should respond_with(200) }
+
+  #   it "should return specified dream in last response body, as json" do
+  #     expect(response.body).to eq(@dream.to_json)
+  #   end
+
+  #   it "should assign specified dream to @dream" do
+  #     expect(assigns(:dream)).to eq(@dream)
+  #   end
+  # end
+
 
 end
