@@ -29,6 +29,8 @@ gem 'engtagger'
 # allow cross origin resourse sharing
 gem 'rack-cors', :require => 'rack/cors'
 
+gem 'rails_12factor'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
