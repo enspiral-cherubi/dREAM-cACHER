@@ -31,6 +31,9 @@ gem 'rack-cors', :require => 'rack/cors'
 
 gem 'rails_12factor'
 
+gem 'faker'
+gem 'factory_girl_rails'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
@@ -43,9 +46,6 @@ group :development, :test do
 
   gem 'rspec-rails', '~> 3.0'
 
-  gem 'faker'
-
-  gem 'factory_girl_rails'
 
 
   gem 'capistrano', '~> 3.4.0'
