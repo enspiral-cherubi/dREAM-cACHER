@@ -10,7 +10,7 @@ set :repo_url, 'git@github.com:enspiral-cherubi/dREAM-cACHER.git'
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, '/home/deploy/dream-cacher'
 
-set :linked_files, %w{config/database.yml config.secrets.yml}
+set :linked_files, %w{config/database.yml config/secrets.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 
