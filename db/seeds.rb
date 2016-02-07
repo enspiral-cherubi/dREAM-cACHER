@@ -8,16 +8,16 @@ end
 
 analyzer = create_sentiment_analyzer
 
-User.destroy_all
-Dream.destroy_all
-Tag.destroy_all
-Theme.destroy_all
+User.delete_all
+Dream.delete_all
+Tag.delete_all
+Theme.delete_all
 
 
 
 users = []
 tags = []
-dreams = [
+dreamsContent = [
   "I was in my bed and my sister was in a bed parallel to mine, she was jumping up and down with a bucket of popcorn in her hand singing some kind of army cadence. The popcorn kernels looked more like seashells than popcorn. Something about it scared me, so I crawled out of my bedroom window, ran across the street to my neighbor's house, they were all standing there like they expected me. Then they asked me to crawl out of their window, they wanted to see me do it again. So I did, but the ground beneath was on fire. I jumped, landed in the fire but the fire was orange and yellow cardboard when I got to it. I jumped up and ran across the street back to my home, ran into my mom's room and she was spreading peanut butter across her bare ass for some reason. I thought it was poop at first, but she assured me it was peanut butter. That's all I remember.",
   "In 8th grade science class, i was doing a research project on brain hemorrhages, and the evening before this dream, i had asked my mom a few questions about my hemorrhage. That night, i saw myself in my dream. I see most of my dreams from third person. In this particular dream, i was viewing it from up in the corner of two walls, by the cieling. Across the room there was a bed with a baby lying on it. Standing between my viewing spot and the bed were a man and a woman. I only saw them from behind, but they appeared to be my parents. The room was completely silent except for the slow but steady beep...beep...beep of the heart rate monitor. Then suddenly, the room went completely silent. Seconds later, the silence was broken by the woman crying. The man hugged her, and i woke up. The next morning, when my mom asked me how well i slept (as she usually did in the morning) i told her about the dream. I described every last detail of the room; how many windows and where, the color of the wallpaper, and the floor. Even the color of the clothes the little child was wearing. And she said everything in my dream was exactly the same as the hospital room i was in 11 years earlier. Neither of my parents had ever described the room to me before. TL;DR saw baby me die of a condition i had (IRL) as a baby, hospital room in dream perfectly matched room i was actually in, never heard a discription of the room before my dream",
   "I'm transported to a land without a sun and have to travel the countryside with a whole bunch of children who wear masks. It's a reoccurring dream that gets longer each time and each time the children warn me that one day I will not wake up from it, doomed forever to walk the land without a sun with a mask over my face much like the children. Throughout our travels, we meet very many horrible creatures not unlike things you might see in silent hill, and due to my traveling companions being children armed with pointy sticks, we don't fight them very well. The children each claim that at one time they too came from the land with a sun and still believe them to be in a very long dream, they worship the sun and hope for the day it will return to them. The children seem to be from many different time periods and countries and no two of their masks are alike. The dreams seem very realistic, the lands I travel through almost surrealistic, and the creatures we face are horrifying.",
