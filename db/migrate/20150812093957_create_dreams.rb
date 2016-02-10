@@ -1,7 +1,7 @@
 class CreateDreams < ActiveRecord::Migration
   def change
     create_table :dreams do |t|
-      t.belongs_to :user
+      t.belongs_to :user, index: true
       t.text :contents
       t.float :sentiment
 
