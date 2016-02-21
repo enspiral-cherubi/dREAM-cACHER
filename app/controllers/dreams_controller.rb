@@ -58,7 +58,7 @@ before_action :authenticate_user!, :only => [:mine]
           tag.save!
         end
       else
-        tag = Tag.create(word: word)
+        Tag.create(word: word)
         Theme.create(tag: tag, dream: dream)
       end
     end
