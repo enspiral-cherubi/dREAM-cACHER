@@ -51,8 +51,16 @@ before_action :authenticate_user!, :only => [:mine]
 
   def create_themes(tag_words, dream)
     tag_words.each do | word |
-      tag = Tag.find_or_create_by(word: word)
-      Theme.create(tag: tag, dream: dream)
+      if (tag = Tag.find_by(word: word))
+        Theme.create(tag: tag, dream: dream)
+        if (!tag.appears_more_than_once)
+          tag.appears_more_than_once = true
+          tag.save!
+        end
+      else
+        tag = Tag.create(word: word)
+        Theme.create(tag: tag, dream: dream)
+      end
     end
   end
 
