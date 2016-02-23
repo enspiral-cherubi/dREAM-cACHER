@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :tag do
-    word 'test'
+    word Faker::Lorem.word
   end
 
 end
