@@ -8,4 +8,6 @@ Rails.application.routes.draw do
   get 'dream/tags', to: 'tags#from_dream'
 
   get 'tag/dreams', to: 'dreams#from_tag'
+
+  resources :views, only: [:create]
 end
