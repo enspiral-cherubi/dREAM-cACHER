@@ -13,8 +13,6 @@ Dream.delete_all
 Tag.delete_all
 Theme.delete_all
 
-
-
 users = []
 tags = []
 dreams = []
@@ -97,25 +95,10 @@ def retreave_tags(hash)
   end
 end
 
-# def create_themes(tag_words, dream)
-#   tag_words.each do | word |
-#     tag = Tag.find_or_create_by(word: word)
-#     Theme.create(tag: tag, dream: dream)
-#   end
-# end
-
 def create_themes(tag_words, dream)
   tag_words.each do | word |
-    if (tag = Tag.find_by(word: word))
-      Theme.create(tag: tag, dream: dream)
-      if (!tag.appears_more_than_once)
-        tag.appears_more_than_once = true
-        tag.save!
-      end
-    else
-      tag = Tag.create(word: word)
-      Theme.create(tag: tag, dream: dream)
-    end
+    tag = Tag.find_or_create_by(word: word)
+    Theme.create(tag: tag, dream: dream)
   end
 end
 
@@ -149,5 +132,3 @@ dreams.each do | dream |
   tag_words = create_tag_words(dream_string)
   create_themes(tag_words, dream)
 end
-
-
