@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150814015925) do
+ActiveRecord::Schema.define(version: 20160223064549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,11 +24,16 @@ ActiveRecord::Schema.define(version: 20150814015925) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "dreams", ["user_id"], name: "index_dreams_on_user_id", using: :btree
+
   create_table "tags", force: :cascade do |t|
     t.string   "word"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "dreams_count", default: 0, null: false
   end
+
+  add_index "tags", ["word"], name: "index_tags_on_word", using: :btree
 
   create_table "themes", force: :cascade do |t|
     t.integer  "dream_id"
@@ -36,6 +41,9 @@ ActiveRecord::Schema.define(version: 20150814015925) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_index "themes", ["dream_id"], name: "index_themes_on_dream_id", using: :btree
+  add_index "themes", ["tag_id"], name: "index_themes_on_tag_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "provider",               default: "email", null: false
