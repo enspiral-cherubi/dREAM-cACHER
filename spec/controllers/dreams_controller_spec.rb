@@ -1,111 +1,128 @@
 require 'rails_helper'
 
 RSpec.describe DreamsController, type: :controller do
-
-  before do
-    @request.env["devise.mapping"] = Devise.mappings[:user]
-    @user = create(:user)
-    sign_in @user
-  end
-
   describe "#index" do
     before do
-      10.times { create(:dream) }
-      @dreams = Dream.order(created_at: :desc)
+      create_list(:dream, 4)
       get :index
     end
 
-    it { should respond_with(200) }
-
-    it "will return all dreams in the db, in the body of the last response, as json" do
-      expect(response.body).to eq(@dreams.to_json)
+    it "returns http status 200" do
+      expect(response).to have_http_status(200)
     end
 
-    it "should assign @dreams to all dreams in the DB" do
-      expect(assigns(:dreams)).to eq(@dreams)
+    it "returns all dreams as json" do
+      expect(parsed(response).length).to eq(4)
     end
   end
 
   describe "#mine" do
-    before do
-      10.times { create(:dream, user_id: @user.id ) }
-      @dreams = @user.dreams.order(created_at: :desc)
-      get :mine, user_id: @user.id
+    context "user signed in" do
+      before do
+        @user = create(:user)
+        request.headers.merge!(@user.create_new_auth_token)
+        create_list(:dream, 2, user: @user)
+        create_list(:dream, 1)
+        get :mine
+      end
+
+      it "returns http status 200" do
+        expect(response).to have_http_status(200)
+      end
+
+      it "returns current_user's dreams" do
+        expect(parsed(response).length).to eq(2)
+      end
     end
 
-    it { should respond_with(200) }
-
-    it "should return a user's dreams in last response body, as json" do
-      expect(response.body).to eq(@dreams.to_json)
-    end
-
-    it "should assign the users dreams to @dreams" do
-      expect(assigns(:dreams)).to eq(@dreams)
+    context "user not signed in" do
+      it "returns http status 401" do
+        get :mine
+        expect(response).to have_http_status(401)
+      end
     end
   end
 
-
-
   describe "#create" do
-    before do
-      # @dream_params = attributes_for(:dream, user_id: @user.id)
-      get :create, dream: 'asdf'
+    context "valid params" do
+      let(:valid_params) { { dream: "was thirsty" } }
+
+      context "user signed in" do
+        before do
+          @user = create(:user)
+          request.headers.merge!(@user.create_new_auth_token)
+          post :create, valid_params
+          @new_dream = Dream.find_by(user: @user, contents: valid_params[:dream])
+        end
+
+        it "returns http status 200" do
+          expect(response).to have_http_status(200)
+        end
+
+        it "creates dream for current_user" do
+          expect(@new_dream).to be_truthy
+        end
+
+        it "returns the newly created dream as json" do
+          expect(parsed(response)["contents"]).to eq(@new_dream.contents)
+        end
+
+        it "creates themes for the dream" do
+          expect(@new_dream.themes).not_to be_empty
+        end
+
+        it "assigns the dream a sentiment score" do
+          expect(@new_dream.sentiment).to be_truthy
+        end
+      end
+
+      context "user not signed in" do
+        before do
+          post :create, valid_params
+          @new_dream = Dream.find_by(contents: valid_params[:dream])
+        end
+
+        it "creates dream for anonymous user" do
+          expect(@new_dream.user.name).to eq("anonymous")
+        end
+      end
     end
 
-    it { should respond_with(302) }
+    context "invalid params" do
+      let(:invalid_params) { { dream: "" } }
 
-    it "creates a new dream with specified params" do
-      expect(Dream.all.count).to eq(1)
-    end
+      before do
+        post :create, invalid_params
+      end
 
-    it "creates a dream with the new dreams params, associated to the user" do
-      dream = Dream.last
-      expect(@user.dreams).to include(dream)
+      it "does not create a new dream" do
+        expect(Dream.count).to eq(0)
+      end
+
+      it "returns http status 400" do
+        expect(response).to have_http_status(400)
+      end
+
+      it "returns list of errors as json" do
+        expect(parsed(response)["errors"]).not_to be_empty
+      end
     end
   end
 
   describe '#from_tag' do
     before do
-      10.times { create(:dream, user_id: @user.id ) }
       @tag = create(:tag)
-      @dreams = Dream.order(created_at: :desc)
-      @dreams.each do | dream |
-        create(:theme, dream_id: dream.id, tag_id: @tag.id)
-      end
-
-      @dreams
-
-      get :index, tag_word: @tag.word
+      @tag.dreams << create_list(:dream, 2)
+      create_list(:dream, 3)
+      get :from_tag, tag: @tag.word
     end
 
-    it { should respond_with(200) }
-
-    it "will return all dreams with a specified tag, in the body of the last response, as json" do
-      expect(response.body).to eq(@dreams.to_json)
+    it "returns http status 200" do
+      expect(response).to have_http_status(200)
     end
 
-    it "should assign @dreams to all dreams with the specified tag" do
-      expect(assigns(:dreams)).to eq(@dreams)
+    it "returns all dreams with specified tag, as json" do
+      expect(parsed(response).length).to eq(2)
     end
   end
-
-
-  # describe "#show" do
-  #   before do
-  #       @dream = create(:dream)
-  #       get :show, id: @dream.id
-  #   end
-
-  #   it { should respond_with(200) }
-
-  #   it "should return specified dream in last response body, as json" do
-  #     expect(response.body).to eq(@dream.to_json)
-  #   end
-
-  #   it "should assign specified dream to @dream" do
-  #     expect(assigns(:dream)).to eq(@dream)
-  #   end
-  # end
-
-
 end
