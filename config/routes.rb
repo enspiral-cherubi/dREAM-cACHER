@@ -9,5 +9,5 @@ Rails.application.routes.draw do
 
   get 'tag/dreams', to: 'dreams#from_tag'
 
-  resources :views, only: [:create]
+  resources :views, only: [:index, :create]
 end
