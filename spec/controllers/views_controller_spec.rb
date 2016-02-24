@@ -54,9 +54,19 @@ RSpec.describe ViewsController, type: :controller do
       end
 
       context "invalid params" do
-        it "returns http status 400" do
-          post :create, invalid_params
-          expect(response).to have_http_status(400)
+        context "no dream_id specified" do
+          it "returns http status 400" do
+            post :create, invalid_params
+            expect(response).to have_http_status(400)
+          end
+        end
+
+        context "view with current_user's id and specified dream_id already exists" do
+          it "returns http status 400" do
+            create(:view, dream: dream, user: user)
+            post :create, valid_params
+            expect(response).to have_http_status(400)
+          end
         end
       end
     end

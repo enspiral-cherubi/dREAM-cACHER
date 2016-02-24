@@ -4,4 +4,5 @@ class View < ActiveRecord::Base
 
   validates :user_id, presence: true
   validates :dream_id, presence: true
+  validates_uniqueness_of :user_id, scope: :dream_id
 end
