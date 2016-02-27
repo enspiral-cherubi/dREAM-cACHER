@@ -36,5 +36,6 @@ module Dreamcacher
       end
     end
 
+    config.eager_load_paths += %W( #{config.root}/services )
   end
 end

@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :theme do
-    user
+    dream
     tag
   end
 

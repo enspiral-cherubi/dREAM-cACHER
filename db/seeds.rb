@@ -13,8 +13,6 @@ Dream.delete_all
 Tag.delete_all
 Theme.delete_all
 
-
-
 users = []
 tags = []
 dreams = []
@@ -134,5 +132,3 @@ dreams.each do | dream |
   tag_words = create_tag_words(dream_string)
   create_themes(tag_words, dream)
 end
-
-

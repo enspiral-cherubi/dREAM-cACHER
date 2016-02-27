@@ -1,31 +1,26 @@
 require 'rails_helper'
 
 RSpec.describe TagsController, type: :controller do
+  describe "#from_dream" do
+    before do
+      @dream1 = create(:dream)
+      @dream2 = create(:dream)
+    end
 
-  before do
-    @dreams = []
-    @user = create(:user)
-    sign_in @user
-    10.times do {
-      dream = create( :dream, user_id: @user.id )
-      @dreams.push(dream)
-    }
-    dreams.length.times do | i |
-      create( :tag, dream_id: @dreams[i].id )
+    it "returns http status 200" do
+      get :from_dream, { dream_id: @dream1.id }
+      expect(response).to have_http_status(200)
+    end
+
+    it "returns all dreams with dreams_count > 1, as json" do
+      tag1 = create(:tag)
+      tag2 = create(:tag)
+      @dream1.tags << [tag1, tag2]
+      @dream2.tags << tag1
+      get :from_dream, { dream_id: @dream1.id }
+
+      expect(parsed(response).length).to eq(1)
+      expect(parsed(response).first["word"]).to eq(tag1.word)
     end
   end
-
-  describe '#dreams' do
-
-    it { should respond_with(200) }
-
-    it "will return all dreams with the presented tag, in the body of the last response, as json" do
-      expect(response.body).to eq(dreams.to_json)
-    end
-
-    it "should assign @dreams to all dreams in the DB" do
-      expect(assigns(:dreams)).to eq(Dreams.all)
-    end
-  end
-
 end
