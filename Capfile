@@ -10,6 +10,7 @@ set :rbenv_ruby, '2.3.0'
 
 require 'capistrano/bundler'
 require 'capistrano/rails'
+require 'capistrano/rails/console'
 
 
 
